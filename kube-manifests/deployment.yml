@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      otus.app/name: demo-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        otus.app/name: demo-service
+    spec:
+      containers:
+        - name: demo-serivce
+          image: auwerk/demo-service:v1.0.0
+          ports:
+            - name: web
+              containerPort: 8000
