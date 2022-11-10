@@ -9,7 +9,14 @@ spec:
     - host: arch.homework
       http:
         paths:
-          - path: /otusapp(/|$)(.*)
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: demo-service
+                port:
+                  number: 80
+          - path: /otusapp/(.*)/*
             pathType: Prefix
             backend:
               service:
