@@ -17,6 +17,16 @@ spec:
       containers:
         - name: demo-serivce
           image: auwerk/demo-service:v1.0.0
+          env:
+            - name: SERVER_PORT
+              value: "8000"
           ports:
             - name: web
               containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: web
+            initialDelaySeconds: 15
+            failureThreshold: 30
+            periodSeconds: 10
