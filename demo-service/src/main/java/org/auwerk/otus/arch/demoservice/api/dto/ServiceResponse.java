@@ -1,4 +1,4 @@
-package org.auwerk.otus.arch.demoservice.dto;
+package org.auwerk.otus.arch.demoservice.api.dto;
 
 import lombok.Builder;
 import lombok.Data;
