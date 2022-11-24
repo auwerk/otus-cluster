@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dbinit
+spec:
+  template:
+    spec:
+      containers:
+      - name: dbinit
+        image: auwerk/demo-service:v1.0.3
+        command: ['java','-jar','/opt/app/app.jar','--spring.profiles.active=init']
+      restartPolicy: Never
+  backoffLimit: 4
