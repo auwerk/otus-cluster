@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.auwerk.otus.arch.demoservice.api.dto.User;
 import org.auwerk.otus.arch.demoservice.entity.UserEntity;
 import org.auwerk.otus.arch.demoservice.repository.UserRepository;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -62,7 +66,7 @@ class UserControllerTest {
         UserEntity userEntity = UserEntity.fromDto(buildUser("user"));
         userRepository.save(userEntity);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/user/" + userEntity.getId()))
+        mockMvc.perform(delete("/user/" + userEntity.getId()))
                 .andExpect(status().isNoContent());
 
         assertEquals(0, userRepository.count());
@@ -70,7 +74,40 @@ class UserControllerTest {
 
     @Test
     void deleteNonExistingUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/user/" + 1L))
+        mockMvc.perform(delete("/user/" + 1L))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getUsers() throws Exception {
+        List<User> users = new ArrayList<>();
+        for (int i = 1; i <= 5; i++) {
+            users.add(buildUser("user-" + i));
+        }
+        users.forEach(user -> {
+            UserEntity userEntity = UserEntity.fromDto(user);
+            userRepository.save(userEntity);
+            user.setId(userEntity.getId());
+        });
+
+        mockMvc.perform(get("/user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", Matchers.hasSize(users.size())));
+    }
+
+    @Test
+    void getUserById() throws Exception {
+        UserEntity userEntity = UserEntity.fromDto(buildUser("user"));
+        userRepository.save(userEntity);
+
+        mockMvc.perform(get("/user/{id}", userEntity.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getNonExistingUser() throws Exception {
+        mockMvc.perform(get("/user/{id}", 123L))
                 .andExpect(status().isNotFound());
     }
 
