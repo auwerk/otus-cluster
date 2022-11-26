@@ -16,10 +16,16 @@ spec:
     spec:
       containers:
         - name: demo-serivce
-          image: auwerk/demo-service:v1.0.3
+          image: auwerk/demo-service:v1.0.4
           env:
             - name: SERVER_PORT
               value: "8000"
+            - name: APP_DB_URL
+              value: jdbc:postgresql://postgresql-dev.default.svc.cluster.local:5432/app_db
+            - name: APP_DB_USERNAME
+              value: app1
+            - name: APP_DB_PASSWORD
+              value: app1_password
           ports:
             - name: web
               containerPort: 8000
