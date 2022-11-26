@@ -4,10 +4,12 @@ management:
       probes:
         enabled: true
 spring:
+  main:
+    banner-mode: off
   datasource:
-    url: jdbc:postgresql://postgresql-dev.default.svc.cluster.local:5432/app_db
-    username: app1
-    password: app1_password
+    url: ${APP_DB_URL}
+    username: ${APP_DB_USERNAME}
+    password: ${APP_DB_PASSWORD}
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: false
