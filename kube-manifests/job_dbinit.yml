@@ -12,9 +12,17 @@ spec:
           - name: APP_DB_URL
             value: jdbc:postgresql://postgresql-dev.default.svc.cluster.local:5432/app_db
           - name: APP_DB_USERNAME
-            value: app1
+            valueFrom:
+              secretKeyRef:
+                name: dbsecret
+                key: USERNAME
+                optional: false
           - name: APP_DB_PASSWORD
-            value: app1_password
+            valueFrom:
+              secretKeyRef:
+                name: dbsecret
+                key: PASSWORD
+                optional: false
         command: ['java','-jar','/opt/app/app.jar','--spring.profiles.active=init']
       restartPolicy: Never
   backoffLimit: 4
