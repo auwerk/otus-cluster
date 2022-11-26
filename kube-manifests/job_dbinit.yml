@@ -10,7 +10,10 @@ spec:
         image: auwerk/demo-service:v1.0.4
         env:
           - name: APP_DB_URL
-            value: jdbc:postgresql://postgresql-dev.default.svc.cluster.local:5432/app_db
+            valueFrom:
+              configMapKeyRef:
+                name: appconfig
+                key: DB_URL
           - name: APP_DB_USERNAME
             valueFrom:
               secretKeyRef:
