@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: dbinit
-        image: auwerk/demo-service:v1.0.7
+        image: auwerk/demo-service:v1.0.8
         env:
           - name: APP_DB_URL
             valueFrom:
