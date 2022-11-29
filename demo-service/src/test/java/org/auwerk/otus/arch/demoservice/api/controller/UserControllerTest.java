@@ -44,8 +44,11 @@ class UserControllerTest {
     void createUser() throws Exception {
         mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(buildUser("user"))))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsBytes(buildUser("user")))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("user"))
+                .andExpect(jsonPath("$.id").exists());
 
         assertEquals(1, userRepository.count());
     }

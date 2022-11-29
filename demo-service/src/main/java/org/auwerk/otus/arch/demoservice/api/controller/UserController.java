@@ -32,10 +32,10 @@ public class UserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             userService.createUser(user);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(user);
         } catch (UserServiceException ex) {
             return ResponseEntity.internalServerError().build();
         }

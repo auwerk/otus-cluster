@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         try {
             UserEntity userEntity = UserEntity.fromDto(user);
             userRepository.save(userEntity);
+            user.setId(userEntity.getId());
         } catch (DataIntegrityViolationException ex) {
             throw new UserServiceException("failed to create user", ex);
         }
