@@ -13,5 +13,7 @@ public interface UserService {
 
     void createUser(User user) throws UserServiceException;
 
+    void updateUser(Long id, User user) throws UserServiceException;
+
     void deleteUser(Long id) throws UserServiceException;
 }

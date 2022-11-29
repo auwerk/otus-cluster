@@ -45,6 +45,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUser(Long id, User user) throws UserServiceException {
+        UserEntity foundUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        foundUser.setUsername(user.getUsername());
+        foundUser.setFirstName(user.getFirstName());
+        foundUser.setLastName(user.getLastName());
+        foundUser.setPhone(user.getPhone());
+        foundUser.setEmail(user.getEmail());
+        userRepository.save(foundUser);
+    }
+
+    @Override
     public void deleteUser(Long id) throws UserServiceException {
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException(id);

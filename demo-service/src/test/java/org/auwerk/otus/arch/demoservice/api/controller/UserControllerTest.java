@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -62,6 +63,25 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(buildUser("user"))))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    void updateUser() throws Exception {
+        User user = buildUser("user");
+        UserEntity userEntity = UserEntity.fromDto(user);
+        userRepository.save(userEntity);
+
+        user.setFirstName("John");
+        user.setLastName("Doe");
+
+        mockMvc.perform(put("/user/" + userEntity.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(user)))
+                .andExpect(status().isOk());
+
+        Optional<UserEntity> foundUser = userRepository.findById(userEntity.getId());
+        assertEquals("John", foundUser.get().getFirstName());
+        assertEquals("Doe", foundUser.get().getLastName());
     }
 
     @Test
