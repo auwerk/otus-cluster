@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: demo-serivce
-          image: auwerk/demo-service:v1.0.4
+          image: auwerk/demo-service:v1.0.7
           env:
             - name: SERVER_PORT
               value: "8000"

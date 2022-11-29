@@ -3,11 +3,12 @@ kind: Job
 metadata:
   name: dbinit
 spec:
+  ttlSecondsAfterFinished: 60
   template:
     spec:
       containers:
       - name: dbinit
-        image: auwerk/demo-service:v1.0.4
+        image: auwerk/demo-service:v1.0.7
         env:
           - name: APP_DB_URL
             valueFrom:
