@@ -12,7 +12,8 @@ minikube addons enable ingress
 
 Для разворачивания БД после выполнить:
 ```
-helm install postgresql-dev -f ./helm-charts/postgresql-dev/values.yaml bitnami/postgresql
+kubectl apply -f ./db/manifests
+helm install postgresql-dev -f ./db/values.yaml bitnami/postgresql
 ```
 
 Для разворачивания сервиса выполнить:

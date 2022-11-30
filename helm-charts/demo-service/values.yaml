@@ -9,6 +9,5 @@ ingress:
   host: arch.homework
 
 db:
-  volumeSize: 2Gi
   hostName: postgresql-dev
   name: app_db
