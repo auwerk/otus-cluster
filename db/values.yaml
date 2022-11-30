@@ -7,4 +7,4 @@ auth:
 primary:
   persistence:
     enabled: true
-    existingClaim: postgresql-data-claim
+    existingClaim: postgresql-data
