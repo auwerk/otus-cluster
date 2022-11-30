@@ -17,7 +17,7 @@
 							"});",
 							"",
 							"var jsonResponse = JSON.parse(responseBody);",
-							"pm.collectionVariables.set(\"created_user_id\", jsonResponse.id);"
+							"pm.collectionVariables.set(\"created_user1_id\", jsonResponse.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -62,7 +62,7 @@
 							"});",
 							"",
 							"var jsonResponse = JSON.parse(responseBody);",
-							"pm.collectionVariables.set(\"created_user_id\", jsonResponse.id);"
+							"pm.collectionVariables.set(\"created_user2_id\", jsonResponse.id);"
 						],
 						"type": "text/javascript"
 					}
@@ -133,7 +133,7 @@
 			"response": []
 		},
 		{
-			"name": "Update created user",
+			"name": "Update created user 1",
 			"event": [
 				{
 					"listen": "test",
@@ -160,7 +160,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://arch.homework/user/{{created_user_id}}",
+					"raw": "http://arch.homework/user/{{created_user1_id}}",
 					"protocol": "http",
 					"host": [
 						"arch",
@@ -168,14 +168,14 @@
 					],
 					"path": [
 						"user",
-						"{{created_user_id}}"
+						"{{created_user1_id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get created and updated user",
+			"name": "Get created and updated user 1",
 			"event": [
 				{
 					"listen": "test",
@@ -186,7 +186,7 @@
 							"});",
 							"pm.test(\"Contains valid data\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"created_user_id\"));",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"created_user1_id\"));",
 							"    pm.expect(jsonData.username).to.eql(\"johndoe\");",
 							"    pm.expect(jsonData.firstName).to.eql(\"John\");",
 							"    pm.expect(jsonData.lastName).to.eql(\"Doe\");",
@@ -201,7 +201,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://arch.homework/user/{{created_user_id}}",
+					"raw": "http://arch.homework/user/{{created_user1_id}}",
 					"protocol": "http",
 					"host": [
 						"arch",
@@ -209,14 +209,14 @@
 					],
 					"path": [
 						"user",
-						"{{created_user_id}}"
+						"{{created_user1_id}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Delete created user",
+			"name": "Delete created user 2",
 			"event": [
 				{
 					"listen": "test",
@@ -234,7 +234,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://arch.homework/user/{{created_user_id}}",
+					"raw": "http://arch.homework/user/{{created_user2_id}}",
 					"protocol": "http",
 					"host": [
 						"arch",
@@ -242,7 +242,73 @@
 					],
 					"path": [
 						"user",
-						"{{created_user_id}}"
+						"{{created_user2_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete created user 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://arch.homework/user/{{created_user1_id}}",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"path": [
+						"user",
+						"{{created_user1_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete non existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://arch.homework/user/{{created_user1_id}}",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"path": [
+						"user",
+						"{{created_user1_id}}"
 					]
 				}
 			},
@@ -271,8 +337,13 @@
 	],
 	"variable": [
 		{
-			"key": "created_user_id",
-			"value": "1"
+			"key": "created_user1_id",
+			"value": "0"
+		},
+		{
+			"key": "created_user2_id",
+			"value": "0",
+			"type": "default"
 		}
 	]
 }
