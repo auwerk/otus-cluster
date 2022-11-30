@@ -1,0 +1,13 @@
+{{- $fullName := include "demo-service.fullname" . -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ $fullName }}"
+  labels:
+    {{- include "demo-service.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.db.volumeSize }}

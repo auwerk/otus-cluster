@@ -1,45 +1,48 @@
+{{- $fullName := include "demo-service.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-service
+  name: {{ $fullName }}
+  labels:
+    {{- include "demo-service.labels" . | nindent 4 }}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      otus.app/name: demo-service
+      {{- include "demo-service.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        otus.app/name: demo-service
+        {{- include "demo-service.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: demo-serivce
-          image: auwerk/demo-service:v1.0.8
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:v{{ .Chart.AppVersion }}"
           env:
             - name: SERVER_PORT
-              value: "8000"
+              value: "{{ .Values.service.port | default 8080 }}"
             - name: APP_DB_URL
               valueFrom:
                 configMapKeyRef:
-                  name: appconfig
+                  name: {{ $fullName }}
                   key: DB_URL
             - name: APP_DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: dbsecret
+                  name: "{{ $fullName }}-db"
                   key: USERNAME
                   optional: false
             - name: APP_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dbsecret
+                  name: "{{ $fullName }}-db"
                   key: PASSWORD
                   optional: false
           ports:
             - name: web
-              containerPort: 8000
+              containerPort: {{ .Values.service.port | default 8080 }}
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness

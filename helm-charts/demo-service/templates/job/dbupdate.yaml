@@ -1,30 +1,35 @@
+{{- $fullName := include "demo-service.fullname" . -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: dbinit
+  name: "{{ $fullName }}-updatedb"
+  labels:
+    {{- include "demo-service.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
 spec:
   ttlSecondsAfterFinished: 60
   template:
     spec:
       containers:
-      - name: dbinit
-        image: auwerk/demo-service:v1.0.8
+      - name: "{{ .Chart.Name }}-updatedb"
+        image: "{{ .Values.image.repository }}:v{{ .Chart.AppVersion }}"
         env:
           - name: APP_DB_URL
             valueFrom:
               configMapKeyRef:
-                name: appconfig
+                name: {{ $fullName }}
                 key: DB_URL
           - name: APP_DB_USERNAME
             valueFrom:
               secretKeyRef:
-                name: dbsecret
+                name: "{{ $fullName }}-db"
                 key: USERNAME
                 optional: false
           - name: APP_DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: dbsecret
+                name: "{{ $fullName }}-db"
                 key: PASSWORD
                 optional: false
         command: ['java','-jar','/opt/app/app.jar','--spring.profiles.active=init']

@@ -1,0 +1,14 @@
+image:
+  repository: auwerk/demo-service
+
+service:
+  port: 8000
+
+ingress:
+  className: nginx
+  host: arch.homework
+
+db:
+  volumeSize: 2Gi
+  hostName: postgresql-dev
+  name: app_db
