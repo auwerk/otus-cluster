@@ -10,6 +10,11 @@ minikube addons enable ingress
 ```
 Хост arch.homework должен быть добавлен в /etc/hosts c IP адресом minikube
 
+Для разворачивания монторинга выполнить:
+```
+helm install prometheus prometheus-community/kube-prometheus-stack -f ./monitoring/prometheus.yaml --atomic
+```
+
 Для разворачивания БД после выполнить:
 ```
 kubectl apply -f ./db/manifests
