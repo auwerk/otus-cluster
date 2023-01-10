@@ -2,14 +2,18 @@ import { check, fail, sleep } from 'k6';
 import http from 'k6/http';
 import exec from 'k6/execution';
 
-function createUser(userNum) {
-    const user = {
+function initUserData(userNum) {
+	return {
         username: `user${userNum}`,
         email: `user${userNum}@users.ru`,
         firstName: 'John',
         lastName: 'Doe',
         phone: 99999
     };
+}
+
+function createUser(userNum) {
+    const user = initUserData(userNum);
 
     const params = {
         headers: {
@@ -27,6 +31,19 @@ function createUser(userNum) {
     return res.json().id;
 }
 
+function duplicateUser(userNum) {
+	const user = initUserData(userNum);
+
+    const params = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    };
+
+    const res = http.post('http://arch.homework/user/', JSON.stringify(user), params);
+	check(res, { 'duplicateUser.status is 500': (r) => r.status == 500 });
+}
+
 function deleteUser(userId) {
     const res = http.del(`http://arch.homework/user/${userId}`);
     check(res, { 'deleteUser.status is 204': (r) => r.status == 204 });
@@ -37,5 +54,9 @@ export default function() {
 
     let userId = createUser(userNum);
     sleep(1);
+	let duplicateChance = Math.random();
+	if (duplicateChance > 0.8) {
+		duplicateUser(userNum);
+	}
     deleteUser(userId);
 }
