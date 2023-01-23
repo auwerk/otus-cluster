@@ -49,6 +49,16 @@ function deleteUser(userId) {
     check(res, { 'deleteUser.status is 204': (r) => r.status == 204 });
 }
 
+function getUserById(userId) {
+	const res = http.get(`http://arch.homework/user/${userId}`);
+	check(res, { 'getUserById.status is 200': (r) => r.status == 200 });
+}
+
+function getUsers() {
+	const res = http.get('http://arch.homework/user/');
+	check(res, { 'getUsers.status is 200': (r) => r.status == 200 });
+}
+
 export default function() {
     const userNum = exec.vu.idInTest;
 
@@ -57,6 +67,8 @@ export default function() {
 	let duplicateChance = Math.random();
 	if (duplicateChance > 0.8) {
 		duplicateUser(userNum);
+		getUsers();
 	}
+	getUserById(userId);
     deleteUser(userId);
 }
