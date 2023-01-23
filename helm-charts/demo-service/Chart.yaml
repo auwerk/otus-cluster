@@ -5,4 +5,4 @@ description: Otus Architecture Course demo service
 type: application
 
 version: 0.1.0
-appVersion: "1.0.9"
+appVersion: "1.0.10"
