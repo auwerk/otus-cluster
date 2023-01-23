@@ -11,6 +11,11 @@ management:
     export:
       prometheus:
         enabled: true
+    web:
+      server:
+        request:
+          autotime:
+            percentiles-histogram: true
 spring:
   main:
     banner-mode: off
