@@ -10,4 +10,5 @@ ingress:
 
 db:
   hostName: postgresql-dev
+  namespace: db
   name: app_db

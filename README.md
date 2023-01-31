@@ -6,34 +6,28 @@
 
 Установка ingress-nginx средствами helm:
 ```
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
-Настройка сервис-монитора ingress-контроллера:
+Настройка метрик ingress-контроллера:
 ```
-helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
---namespace ingress-nginx \
---set controller.metrics.enabled=true \
---set controller.metrics.serviceMonitor.enabled=true
+helm upgrade ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --set controller.metrics.enabled=true --set-string controller.podAnnotations."prometheus\.io/scrape"="true" --set-string controller.podAnnotations."prometheus\.io/port"="10254"
 ```
-
-Хост arch.homework должен быть добавлен в /etc/hosts c IP адресом minikube
 
 Для разворачивания монторинга выполнить:
 ```
-helm install prometheus prometheus-community/kube-prometheus-stack -f ./monitoring/prometheus.yaml --atomic
+helm install prometheus prometheus-community/kube-prometheus-stack -f ./helm-charts/kube-prometheus-stack/values.yaml --atomic --namespace monitoring --create-namespace
 ```
 
 Для разворачивания БД после выполнить:
 ```
-kubectl apply -f ./db/manifests
-helm install postgresql-dev -f ./db/values.yaml bitnami/postgresql
+kubectl create ns db
+kubectl apply -f ./db/manifests --namespace db
+helm install postgresql-dev -f ./db/values.yaml bitnami/postgresql --namespace db
 ```
 
 Для разворачивания сервиса выполнить:
 ```
-helm install demo-service ./helm-charts/demo-service
+helm install demo-service ./helm-charts/demo-service --namespace otus --create-namespace
 ```
 
 Для тестирования запросов к сервису можно использовать Postman. Файлы коллекций:
