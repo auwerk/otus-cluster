@@ -19,11 +19,11 @@ export const options = {
         failing_scenario: {
             executor: 'constant-arrival-rate',
             exec: 'fullCycleWithErrorTest',
-            startTime: '3m',
+            startTime: '7m',
             duration: '2m',
-            rate: 16,
-            preAllocatedVUs: 2,
-            maxVUs: 32,
+            rate: 48,
+            preAllocatedVUs: 24,
+            maxVUs: 64,
         }
     }
 };
