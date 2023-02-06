@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 27,
+  "id": 28,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -256,6 +256,18 @@
           "legendFormat": "q=0.99",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(1.0, sum by(le) (rate(nginx_ingress_controller_request_duration_seconds_bucket{path=\"/user/(.*)/*\"}[2m]))) * 1000",
+          "hide": false,
+          "legendFormat": "q=max",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "Latency",
@@ -494,6 +506,18 @@
           "legendFormat": "q=0.99",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(1.0, sum by(le) (rate(http_server_requests_seconds_bucket{method=\"GET\",uri=\"/user\"}[2m]))) * 1000",
+          "hide": false,
+          "legendFormat": "q=max",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "GET /user latency",
@@ -719,6 +743,18 @@
           "legendFormat": "q=0.99",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(1.0, sum by(le) (rate(http_server_requests_seconds_bucket{method=\"GET\",uri=\"/user/{id}\"}[2m]))) * 1000",
+          "hide": false,
+          "legendFormat": "q=max",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "GET /user/{id} latency",
@@ -770,8 +806,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -876,8 +911,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -995,8 +1029,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1101,8 +1134,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1169,6 +1201,18 @@
           "legendFormat": "q=0.99",
           "range": true,
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(1.0, sum by(le) (rate(http_server_requests_seconds_bucket{method=\"DELETE\",uri=\"/user/{id}\"}[2m]))) * 1000",
+          "hide": false,
+          "legendFormat": "q=max",
+          "range": true,
+          "refId": "D"
         }
       ],
       "title": "DELETE /user/{id} latency",
@@ -1190,6 +1234,6 @@
   "timezone": "",
   "title": "demo-service",
   "uid": "fW4KMOTVk",
-  "version": 22,
+  "version": 3,
   "weekStart": ""
 }

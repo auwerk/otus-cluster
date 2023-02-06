@@ -2,7 +2,31 @@ import { check, fail, sleep } from 'k6';
 import http from 'k6/http';
 import exec from 'k6/execution';
 
-const KUBE_HOST = "arch.homework:30043";
+const KUBE_HOST = "arch.homework";
+
+export const options = {
+    scenarios: {
+        normal_scenario: {
+            executor: 'ramping-vus',
+            exec: 'fullCycleTest',
+            startVus: 2,
+            stages: [
+                { duration: '5m', target: 25 },
+                { duration: '5m', target: 30 },
+                { duration: '5m', target: 0 }
+            ],
+        },
+        failing_scenario: {
+            executor: 'constant-arrival-rate',
+            exec: 'fullCycleWithErrorTest',
+            startTime: '3m',
+            duration: '2m',
+            rate: 16,
+            preAllocatedVUs: 2,
+            maxVUs: 32,
+        }
+    }
+};
 
 function initUserData(userNum) {
 	return {
@@ -61,7 +85,17 @@ function getUsers() {
 	check(res, { 'getUsers.status is 200': (r) => r.status == 200 });
 }
 
-export default function() {
+export function fullCycleTest() {
+    const userNum = exec.vu.idInTest;
+
+    let userId = createUser(userNum);
+    sleep(1);
+	getUsers();
+	getUserById(userId);
+    deleteUser(userId);
+}
+
+export function fullCycleWithErrorTest() {
     const userNum = exec.vu.idInTest;
 
     let userId = createUser(userNum);
