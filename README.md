@@ -1,8 +1,10 @@
 # Кластер с ДЗ для OTUS arch
 
 Каталоги:
-- demo-service, исходный код сервиса и Dockerfile
+- db, ресурсы БД
+- grafana, дашборды
 - helm-charts, чарты helm
+- k6-scripts, скрипты нагрузки
 
 Установка ingress-nginx средствами helm:
 ```
